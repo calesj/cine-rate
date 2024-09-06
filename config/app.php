@@ -123,4 +123,9 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    // SERVICES
+
+    'tmdb_token' => env('TMDB_TOKEN', ''),
+    'tmdb_image' => env('TMDB_IMAGE', ''),
+
 ];

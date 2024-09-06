@@ -20,6 +20,7 @@ return new class extends Migration
             $table->date('release_date')->nullable();
             $table->integer('runtime')->nullable();
             $table->string('classification')->nullable();
+            $table->string('trailer')->nullable();
             $table->integer('views')->default(0);
             $table->foreignId('author_id')->constrained('users');
             $table->timestamps();
