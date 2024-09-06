@@ -2,7 +2,7 @@
 
 @section('content')
     <!-- sign in -->
-    <div class="sign section--full-bg" data-bg="img/bg.jpg">
+    <div class="sign section--full-bg" data-bg="{{ asset('assets/img/bg.jpg') }}">
         <div class="container">
             <div class="row">
                 <div class="col-12">
