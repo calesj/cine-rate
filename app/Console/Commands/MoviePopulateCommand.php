@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Console\Commands\Traits\MovieTrait;
 use App\Jobs\MoviePopulateJob;
 use App\Models\Movie\Movie;
 use Illuminate\Console\Command;
@@ -10,6 +11,7 @@ use Illuminate\Support\Facades\Http;
 
 class MoviePopulateCommand extends Command
 {
+    use MovieTrait;
     /**
      * The name and signature of the console command.
      *
@@ -43,23 +45,8 @@ class MoviePopulateCommand extends Command
             /** Pegando o id de todos os filmes que a requisicao retornou, e verificando se ela ja esta salva no banco */
             $existingMovies = Movie::query()->whereIn('id', array_column($popularMovies['results'], 'id'))->pluck('id')->toArray();
 
-            foreach ($popularMovies['results'] as $movie) {
-                /** Verifica se ja existe no banco, senao existir, ele salva */
-                if (!in_array($movie['id'], $existingMovies)) {
-                    $trailer = Http::withToken($token)->get("https://api.themoviedb.org/3/movie/{$movie['id']}/videos?language=pt-br")->json()['results'];
-
-                    if (empty($trailer)) {
-                        $trailer = Http::withToken($token)->get("https://api.themoviedb.org/3/movie/{$movie['id']}/videos")->json()['results'];
-                    }
-
-                    $film = Http::withToken($token)->get("https://api.themoviedb.org/3/movie/{$movie['id']}?language=pt-BR")->json();
-                    $film['genre_ids'] = $movie['genre_ids'];
-                    $film['trailer'] = $trailer[0]['key'] ?? false;
-                    $film['playing_now'] = 0;
-
-                    MoviePopulateJob::dispatch($film);
-                }
-            }
+            /** Verifica se o filme já esta salvo no banco, se estiver, ele ignora */
+            $this->verifyExists($popularMovies['results'], $existingMovies, $token);
 
             $progressBar->advance();
         }

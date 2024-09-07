@@ -49,4 +49,19 @@ class Movie extends Model
     {
         return $query->where('type', '=', 'movie');
     }
+
+    public function scopeSearch($query, $search)
+    {
+        return $query->where('title', 'like', '%' . $search . '%');
+    }
+
+    public function scopeGenre($query, $slug)
+    {
+        return $query->with('genres')->where('slug', '=', $slug);
+    }
+
+    public function scopePlayingNow($query)
+    {
+        return $query->where('playing_now', 1)->orderByDesc('release_date');
+    }
 }
