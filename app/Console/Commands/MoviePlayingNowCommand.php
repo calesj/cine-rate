@@ -8,14 +8,14 @@ use Illuminate\Console\Command;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Support\Facades\Http;
 
-class MoviePopulateCommand extends Command
+class MoviePlayingNowCommand extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'populate:movie';
+    protected $signature = 'populate:now-movie';
 
     /**
      * The console command description.
@@ -38,10 +38,10 @@ class MoviePopulateCommand extends Command
 
         for ($i = 1; $i <= $total; $i++) {
             $this->info('Pegando todos os Filmes da pagina ' . $i);
-            $popularMovies = Http::withToken($token)->get('https://api.themoviedb.org/3/movie/popular?language=pt-br&page=' . $i)->json();
+            $popularMovies = Http::withToken($token)->get('https://api.themoviedb.org/3/movie/now_playing?language=pt-br&page=1' . $i)->json();
 
             /** Pegando o id de todos os filmes que a requisicao retornou, e verificando se ela ja esta salva no banco */
-            $existingMovies = Movie::query()->whereIn('id', array_column($popularMovies['results'], 'id'))->pluck('id')->toArray();
+            $existingMovies = verifyExists($popularMovies['results']);
 
             foreach ($popularMovies['results'] as $movie) {
                 /** Verifica se ja existe no banco, senao existir, ele salva */
@@ -55,7 +55,7 @@ class MoviePopulateCommand extends Command
                     $film = Http::withToken($token)->get("https://api.themoviedb.org/3/movie/{$movie['id']}?language=pt-BR")->json();
                     $film['genre_ids'] = $movie['genre_ids'];
                     $film['trailer'] = $trailer[0]['key'] ?? false;
-                    $film['playing_now'] = 0;
+                    $film['playing_now'] = 1;
 
                     MoviePopulateJob::dispatch($film);
                 }

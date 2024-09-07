@@ -22,6 +22,7 @@ class Movie extends Model
         'trailer',
         'views',
         'author_id',
+        'playing_now'
     ];
 
     public function users(): BelongsToMany

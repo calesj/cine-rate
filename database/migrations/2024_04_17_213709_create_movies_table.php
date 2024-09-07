@@ -17,6 +17,7 @@ return new class extends Migration
             $table->text('overview')->nullable();
             $table->string('type')->default('movie');
             $table->string('image')->nullable();
+            $table->boolean('playing_now')->default(false);
             $table->date('release_date')->nullable();
             $table->integer('runtime')->nullable();
             $table->string('classification')->nullable();

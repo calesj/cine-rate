@@ -38,6 +38,7 @@ class MoviePopulateJob implements ShouldQueue
             'image' => $this->movie['poster_path'],
             'release_date' => $this->movie['release_date'] ?? null,
             'trailer' => $this->movie['release_date'] ?? null,
+            'playing_now' => $this->movie['playing_now'],
             'runtime' => $this->movie['runtime'],
             'views' => $this->movie['popularity'],
             'author_id' => 1,

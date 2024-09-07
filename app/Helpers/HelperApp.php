@@ -91,3 +91,8 @@ function verifyType(Movie $movie): string
 {
     return $movie->type !== 'movie' ? route('serie.show', $movie->id) : route('movie.show', $movie->id);
 }
+
+function verifyExists(array $movies): array
+{
+    return Movie::query()->whereIn('id', array_column($movies, 'id'))->pluck('id')->toArray();
+}
