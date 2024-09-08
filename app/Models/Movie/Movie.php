@@ -57,7 +57,9 @@ class Movie extends Model
 
     public function scopeGenre($query, $slug)
     {
-        return $query->with('genres')->where('slug', '=', $slug);
+        return $query->whereHas('genres', function ($query) use ($slug) {
+            $query->where('slug', $slug);
+        });
     }
 
     public function scopePlayingNow($query)

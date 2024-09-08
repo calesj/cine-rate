@@ -23,7 +23,8 @@ class SearchRequest extends FormRequest
     {
         return [
             'per_page' => 'sometimes|nullable',
-            'search' => 'sometimes|nullable'
+            'search' => 'sometimes|nullable',
+            'category' => 'sometimes|nullable',
         ];
     }
 }
