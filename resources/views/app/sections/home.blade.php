@@ -10,7 +10,7 @@
     <div class="home__carousel owl-carousel" id="flixtv-hero">
         @foreach($nowPlaying as $movie)
             <div class="home__card">
-                <a href="details.html">
+                <a href="{{{ route('movie.show', $movie->id) }}}">
                     <img src="{{ movieImage($movie->image) }}" alt="">
                 </a>
                 <div>

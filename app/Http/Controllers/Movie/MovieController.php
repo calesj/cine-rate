@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Movie;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\PerPageRequest;
 use App\Http\Requests\SearchRequest;
 use App\Models\Api;
 use App\Models\Movie\Genre;
@@ -74,61 +73,15 @@ class MovieController extends Controller
     }
 
     /** Detalhes do filme com base no id passado por parametro */
-    public function show(string $id, PerPageRequest $request)
+    public function show(string $id)
     {
-        $isFavorite = false;
-
-        if (auth()->check()) {
-            $user = auth()->user();
-            $isFavorite = $user->favorites()->where('movie_id', $id)->exists();
-        }
-
-        $perPage = $request->input('per_page', 10);
-
-        $movie = $this->movie->where(['movies.id' => $id])->with(['genres', 'trailer'])->movie()->rating()->firstOrFail();
+        $movie = $this->movie->findOrFail($id)->load('genres');
 
         if (!$movie) {
             return redirect()->route('fallback.route');
         }
 
-        /** Pegando token da Api de filmes */
-        $token = $this->api->whereName('tmdb')->value('token');
-
-        /** Pegando a url padrao da API de filmes */
-        $url = $this->api->whereName('tmdb')->value('url');
-
-        /** Companias que fizeram o filme */
-        $companies = $this->http::withToken($token)->get($url . "/movie/{$id}?language=pt-BR")->json()['production_companies'] ?? [];
-
-        /** Retornando todas imagens conforme o id passado por parametro */
-        $backdrops = $this->http::withToken($token)->get($url . "/movie/{$id}/images")->json();
-
-        $images = [];
-
-        if (!empty($backdrops['backdrops'])) {
-            /** Pegando no maximo 3 imagens por filme */
-            $images = collect($backdrops['backdrops'])->take(4) ?? false;
-        }
-
-        /** Filmes relacionados */
-        $relatedMovies = $this->movie->whereHas('genres', function ($query) use ($movie) {
-            $query->whereIn('genres.id', $movie->genres->pluck('id'));
-        })->where('movies.id','!=', $movie->id)->rating()->with(['genres'])->limit(5)->get();
-
-        /** Pegando reviews do filme */
-        $reviews = $movie->reviews()->orderByDesc('created_at');
-
-        /** Paginação dos reviews */
-        $reviews = $reviews->paginate($perPage);
-
-        return view('site.movie.show', compact([
-            'movie',
-            'images',
-            'companies',
-            'reviews',
-            'relatedMovies',
-            'isFavorite'
-        ]));
+        return view('app.detail', compact('movie'));
     }
 
     /** Detalhes da serie com base no id passado por parametro */

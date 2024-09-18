@@ -3,7 +3,6 @@
 namespace App\Console\Commands;
 
 use App\Console\Commands\Traits\MovieTrait;
-use App\Jobs\MoviePopulateJob;
 use App\Models\Movie\Movie;
 use Illuminate\Console\Command;
 use Illuminate\Http\Client\ConnectionException;
