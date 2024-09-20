@@ -463,8 +463,6 @@
         </div>
     </section>
     <!-- end similar -->
-
-
 @endsection
 
 @push('scripts')
