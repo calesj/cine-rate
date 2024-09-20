@@ -66,4 +66,12 @@ class Movie extends Model
     {
         return $query->where('playing_now', 1)->orderByDesc('release_date');
     }
+
+    public function scopeSimiliarMovies($query, $id, $genres)
+    {
+        $array = $genres->pluck('id')->toArray();
+        return $query->whereHas('genres', function ($query) use ($array) {
+            $query->whereIn('genre_id', $array);
+        })->where('movies.id', '!=', $id);
+    }
 }

@@ -75,13 +75,18 @@ class MovieController extends Controller
     /** Detalhes do filme com base no id passado por parametro */
     public function show(string $id)
     {
-        $movie = $this->movie->findOrFail($id)->load('genres');
+        $movie = $this->movie->with(['genres'])->find($id);
+
 
         if (!$movie) {
             return redirect()->route('fallback.route');
         }
 
-        return view('app.detail', compact('movie'));
+        $reviews = $movie->reviews()->with('user')->paginate(7);
+
+        $similiarMovies = $movie->similiarMovies($movie->id, $movie->genres)->get()->take(4);
+
+        return view('app.detail', compact('movie', 'reviews', 'similiarMovies'));
     }
 
     /** Detalhes da serie com base no id passado por parametro */
