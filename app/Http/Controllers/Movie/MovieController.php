@@ -82,7 +82,7 @@ class MovieController extends Controller
             return redirect()->route('fallback.route');
         }
 
-        $reviews = $movie->reviews()->with('user')->paginate(7);
+        $reviews = $movie->reviews()->with(['user'])->likesCount()->dislikesCount()->paginate(7);
 
         $similiarMovies = $movie->similiarMovies($movie->id, $movie->genres)->get()->take(4);
 

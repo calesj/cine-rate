@@ -14,8 +14,12 @@ return new class extends Migration
         Schema::create('likes', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users');
-            $table->boolean('like')->default(false);
+            $table->foreignId('review_id')->constrained('reviews');
+            $table->string('status');
             $table->timestamps();
+
+            /** Garantir que cada usuário só possa dar um like/unlike por review */
+            $table->unique(['user_id', 'review_id']);
         });
     }
 

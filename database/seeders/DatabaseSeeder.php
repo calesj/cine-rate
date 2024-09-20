@@ -2,10 +2,12 @@
 
 namespace Database\Seeders;
 
+use App\Models\Movie\Like;
 use App\Models\Movie\Review;
 use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+
+// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class DatabaseSeeder extends Seeder
 {
@@ -18,5 +20,6 @@ class DatabaseSeeder extends Seeder
 
         User::factory(100)->create();
         Review::factory(500)->create();
+//        Like::factory(150)->create();
     }
 }

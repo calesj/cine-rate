@@ -85,6 +85,7 @@
                                         @foreach($reviews as $review)
                                             <li class="reviews__item">
                                                 <div class="reviews__autor">
+                                                    {{ $review->id }}
                                                     <img class="reviews__avatar" src="{{ $review->user->image ? asset('avatar/' . $review->user->image) : asset('assets/img/avatar.svg') }}" alt="">
                                                     <span class="reviews__name">{{ $review->title }}</span>
                                                     <span class="reviews__time">{{ $review->user->name }} - {{ releaseDate($review->created_at) }} </span>
@@ -93,9 +94,18 @@
                                                 <p class="reviews__text">{{ $review->description }}</p>
                                                 <div class="comments__actions">
                                                     <div class="comments__rate">
-                                                        <button type="button"><svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M11 7.3273V14.6537" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M14.6667 10.9905H7.33333" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path><path fill-rule="evenodd" clip-rule="evenodd" d="M15.6857 1H6.31429C3.04762 1 1 3.31208 1 6.58516V15.4148C1 18.6879 3.0381 21 6.31429 21H15.6857C18.9619 21 21 18.6879 21 15.4148V6.58516C21 3.31208 18.9619 1 15.6857 1Z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg> 10</button>
-
-                                                        <button type="button">0 <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M14.6667 10.9905H7.33333" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path><path fill-rule="evenodd" clip-rule="evenodd" d="M15.6857 1H6.31429C3.04762 1 1 3.31208 1 6.58516V15.4148C1 18.6879 3.0381 21 6.31429 21H15.6857C18.9619 21 21 18.6879 21 15.4148V6.58516C21 3.31208 18.9619 1 15.6857 1Z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg></button>
+                                                        <form action="{{ route('review.like') }}" method="POST">
+                                                            @csrf
+                                                            <input type="hidden" name="status" value="like">
+                                                            <input type="hidden" name="review_id" value="{{ $review->id }}">
+                                                            <button type="submit">{{ $review->likes_count }}<svg style="stroke: green" width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M11 7.3273V14.6537" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M14.6667 10.9905H7.33333" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path><path fill-rule="evenodd" clip-rule="evenodd" d="M15.6857 1H6.31429C3.04762 1 1 3.31208 1 6.58516V15.4148C1 18.6879 3.0381 21 6.31429 21H15.6857C18.9619 21 21 18.6879 21 15.4148V6.58516C21 3.31208 18.9619 1 15.6857 1Z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg></button>
+                                                        </form>
+                                                        <form action="{{ route('review.like') }}" method="POST">
+                                                            @csrf
+                                                            <input id="status" type="hidden" name="status" value="dislike">
+                                                            <input id="review-id" type="hidden" name="review_id" value="{{ $review->id }}">
+                                                            <button type="submit"><svg style="stroke: red; margin-right: 8px" width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M14.6667 10.9905H7.33333" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path><path fill-rule="evenodd" clip-rule="evenodd" d="M15.6857 1H6.31429C3.04762 1 1 3.31208 1 6.58516V15.4148C1 18.6879 3.0381 21 6.31429 21H15.6857C18.9619 21 21 18.6879 21 15.4148V6.58516C21 3.31208 18.9619 1 15.6857 1Z" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>  {{ $review->dislikes_count }}</button>
+                                                        </form>
                                                     </div>
                                                     <br>
                                                  </div>

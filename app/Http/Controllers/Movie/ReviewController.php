@@ -3,8 +3,11 @@
 namespace App\Http\Controllers\Movie;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\LikeRequest;
 use App\Http\Requests\ReviewRequest;
+use App\Models\Movie\Like;
 use App\Models\Movie\Review;
+use Illuminate\Http\Request;
 
 class ReviewController extends Controller
 {
@@ -59,5 +62,22 @@ class ReviewController extends Controller
     public function destroy($id)
     {
         // Exclui um post do banco de dados
+    }
+
+    public function like(LikeRequest $request)
+    {
+        $userId = auth()->user()->id;
+
+        Like::updateOrCreate(
+            [
+                'user_id' => $userId,
+                'review_id' => $request['review_id'],
+            ],
+            [
+                'status' => $request['status']
+            ]
+        );
+
+        return redirect()->back();
     }
 }
