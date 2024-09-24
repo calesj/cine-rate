@@ -28,7 +28,9 @@ class MovieController extends Controller
 
         $reviews = $user->reviews()->with('movie')->paginate(10);
 
-        return view('app.profile.dashboard', compact('user', 'reviews'));
+        $favorites = $user->favorites()->count();
+
+        return view('app.profile.dashboard', compact('user', 'reviews', 'favorites'));
     }
 
     /** Retorna lista de filmes agrupados por gênero */

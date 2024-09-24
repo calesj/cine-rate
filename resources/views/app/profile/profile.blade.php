@@ -12,12 +12,11 @@
                 <div class="profile">
                     <div class="profile__user">
                         <div class="profile__avatar">
-                            <img src="img/avatar.svg" alt="">
+                            <img src="{{ asset('storage/' . $user->image) }}" alt="">
                         </div>
-                        <div class="profile__meta">
-                            <h3>John Doe</h3>
-                            <span>FlixTV ID: {{ $user->id }}</span>
-                        </div>
+                            <div class="profile__meta">
+                                <h3>{{ $user->name }}</h3>
+                            </div>
                     </div>
 
                     <!-- tabs nav -->
@@ -56,7 +55,7 @@
                             <div class="row">
                                 <!-- details form -->
                                 <div class="col-12 col-lg-6">
-                                    <form action="{{ route('profile.update') }}" method="POST" class="sign__form sign__form--profile sign__form--first">
+                                    <form action="{{ route('profile.update') }}" enctype="multipart/form-data" method="POST" class="sign__form sign__form--profile sign__form--first">
                                         @csrf
                                         @method('PATCH')
                                         <div class="row">
@@ -77,6 +76,20 @@
                                                     <input id="email" type="text" name="email" class="sign__input" value="{{ $user->email }}">
                                                 </div>
                                             </div>
+
+                                            <div class="col-12 col-md-6 col-lg-12 col-xl-6">
+                                                <div class="sign__group">
+                                                    <label class="sign__label" for="email">Foto</label>
+                                                    <input class="form-control" style="color: white" name="image" type="file" value="{{ asset('storage/' . $user->image) }}" id="image">
+                                                </div>
+                                            </div>
+
+                                            <div style="margin-left: 26%">
+                                                <img id="show-image"
+                                                     src="{{ (!empty($user->image)) ? asset('storage/' . $user->image) : asset('assets/img/avatar.svg')}}"
+                                                     alt="" style="border-radius: 10px" width="110">
+                                            </div>
+
 
                                             <div class="col-12">
                                                 <button class="sign__btn" type="submit">Salvar</button>
@@ -138,3 +151,17 @@
 
 @include('app.components.swet-alert-success')
 @include('app.components.swet-alert-error')
+
+@push('scripts')
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#image').change(function (e) { // QUANDO O INPUT HOUVER ALGUMA ALTERACAO
+                const reader = new FileReader(); // GERA INSTACIA DO NEW FILEHEADER.
+                reader.onload = function (e) { // ASSIM QUE O FILEREADER CARREGAR
+                    $('#show-image').attr('src', e.target.result) // SOBRESCREVE A IMAGEM, COM A IMAGEM DO INPUT
+                }
+                reader.readAsDataURL(e.target.files['0'])
+            })
+        })
+    </script>
+@endpush

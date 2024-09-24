@@ -32,6 +32,12 @@ class ProfileController extends Controller
             $request->user()->email_verified_at = null;
         }
 
+        if ($request->hasFile('image')) {
+            $fileName = md5($request->input('email')) . '.' . 'png';
+
+            $request->user()->image = $request->file('image')->storeAs('users/avatar', $fileName, 'public');
+        }
+
         $request->user()->save();
 
         return Redirect::route('profile.edit')->with('success', 'Perfil atualizado com sucesso!');

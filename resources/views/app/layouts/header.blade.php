@@ -83,7 +83,7 @@
                         </button>
 
                         @auth
-                            <a href="{{ route('profile.edit') }}" class="header__user">
+                            <a href="{{ route('dashboard') }}" class="header__user">
                                 <span>{{ limitString(auth()->user()->name, 1, '') }}</span>
                             </a>
 

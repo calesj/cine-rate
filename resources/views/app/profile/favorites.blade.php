@@ -10,12 +10,11 @@
                 <div class="profile">
                     <div class="profile__user">
                         <div class="profile__avatar">
-                            <img src="img/avatar.svg" alt="">
+                            <img src="{{ asset('storage/' . $user->image) }}" alt="">
                         </div>
-                        <div class="profile__meta">
-                            <h3>John Doe</h3>
-                            <span>FlixTV ID: {{ $user->id }}</span>
-                        </div>
+                            <div class="profile__meta">
+                                <h3>{{ $user->name }}</h3>
+                            </div>
                     </div>
 
                     <!-- tabs nav -->
