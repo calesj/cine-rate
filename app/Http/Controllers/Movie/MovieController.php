@@ -22,21 +22,13 @@ class MovieController extends Controller
     {}
 
     /** Listagem de filmes */
-    public function index(SearchRequest $request): View
+    public function index(): View
     {
-        $perPage = request()->input('per_page', 10);
+        $user = auth()->user();
 
-        $movies = $this->movie->query();
+        $reviews = $user->reviews()->with('movie')->paginate(10);
 
-        $movies->when($request->has('search'), function ($query) use ($request) {
-            $query->where('title', 'like', '%' . $request->search . '%')->orWhereHas('genres', function ($query) use ($request) {
-                $query->where('name', 'like', '%' . $request->search . '%');
-            });
-        });
-
-        $movies = $movies->paginate($perPage);
-
-        return view('site.movie.index', compact('movies'));
+        return view('app.profile.dashboard', compact('user', 'reviews'));
     }
 
     /** Retorna lista de filmes agrupados por gênero */
@@ -82,11 +74,13 @@ class MovieController extends Controller
             return redirect()->route('fallback.route');
         }
 
-        $reviews = $movie->reviews()->with(['user'])->likesCount()->dislikesCount()->paginate(7);
+        $average = number_format($movie->averageAvaliate(), 1);
+
+        $reviews = $movie->reviews()->with(['user'])->likesCount()->dislikesCount()->orderByDesc('created_at')->paginate(7);
 
         $similiarMovies = $movie->similiarMovies($movie->id, $movie->genres)->get()->take(4);
 
-        return view('app.detail', compact('movie', 'reviews', 'similiarMovies'));
+        return view('app.detail', compact('movie', 'reviews', 'similiarMovies', 'average'));
     }
 
     /** Detalhes da serie com base no id passado por parametro */

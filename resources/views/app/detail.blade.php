@@ -1,21 +1,37 @@
 @extends('app.layouts.master')
 
 @section('content')
+    <div id="modal-delete2" class="zoom-anim-dialog modal mfp-hide">
+        <h6 class="modal__title">Review delete</h6>
+
+        <p class="modal__text">Are you sure to permanently delete this review?</p>
+
+        <div class="modal__btns">
+            <button class="modal__btn modal__btn--apply" type="button">Delete</button>
+            <button class="modal__btn modal__btn--dismiss" type="button">Dismiss</button>
+        </div>
+    </div>
     <!-- details -->
     <section class="section section--head section--head-fixed section--gradient section--details-bg" style="padding-top: 20px !important;">
         <div class="section__bg" data-bg="{{ asset('assets/img/bg.jpg') }}"></div>
         <div class="container">
             <!-- article -->
             <div class="article">
+
                 <div class="row">
                     <div class="col-12 col-xl-9">
+
 
                         <!-- article content -->
                         <div class="article__content">
                             <h1>{{ $movie->title }}</h1>
 
                             <ul class="list">
-                                <li><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M22,9.67A1,1,0,0,0,21.14,9l-5.69-.83L12.9,3a1,1,0,0,0-1.8,0L8.55,8.16,2.86,9a1,1,0,0,0-.81.68,1,1,0,0,0,.25,1l4.13,4-1,5.68A1,1,0,0,0,6.9,21.44L12,18.77l5.1,2.67a.93.93,0,0,0,.46.12,1,1,0,0,0,.59-.19,1,1,0,0,0,.4-1l-1-5.68,4.13-4A1,1,0,0,0,22,9.67Zm-6.15,4a1,1,0,0,0-.29.88l.72,4.2-3.76-2a1.06,1.06,0,0,0-.94,0l-3.76,2,.72-4.2a1,1,0,0,0-.29-.88l-3-3,4.21-.61a1,1,0,0,0,.76-.55L12,5.7l1.88,3.82a1,1,0,0,0,.76.55l4.21.61Z"/></svg> 9.7</li>
+                                <li>
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                        <path d="M22,9.67A1,1,0,0,0,21.14,9l-5.69-.83L12.9,3a1,1,0,0,0-1.8,0L8.55,8.16,2.86,9a1,1,0,0,0-.81.68,1,1,0,0,0,.25,1l4.13,4-1,5.68A1,1,0,0,0,6.9,21.44L12,18.77l5.1,2.67a.93.93,0,0,0,.46.12,1,1,0,0,0,.59-.19,1,1,0,0,0,.4-1l-1-5.68,4.13-4A1,1,0,0,0,22,9.67Zm-6.15,4a1,1,0,0,0-.29.88l.72,4.2-3.76-2a1.06,1.06,0,0,0-.94,0l-3.76,2,.72-4.2a1,1,0,0,0-.29-.88l-3-3,4.21-.61a1,1,0,0,0,.76-.55L12,5.7l1.88,3.82a1,1,0,0,0,.76.55l4.21.61Z"/>
+                                    </svg> {{ $average }}
+                                </li>
                                 <li>{{ $movie->genres[0]->name }}</li>
                                 <li>{{ formartYear($movie->release_date) }}</li>
                                 <li>{{ $movie->runtime }} min</li>
@@ -85,11 +101,19 @@
                                         @foreach($reviews as $review)
                                             <li class="reviews__item">
                                                 <div class="reviews__autor">
-                                                    {{ $review->id }}
                                                     <img class="reviews__avatar" src="{{ $review->user->image ? asset('avatar/' . $review->user->image) : asset('assets/img/avatar.svg') }}" alt="">
                                                     <span class="reviews__name">{{ $review->title }}</span>
                                                     <span class="reviews__time">{{ $review->user->name }} - {{ releaseDate($review->created_at) }} </span>
-                                                    <span class="reviews__rating"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M22,9.67A1,1,0,0,0,21.14,9l-5.69-.83L12.9,3a1,1,0,0,0-1.8,0L8.55,8.16,2.86,9a1,1,0,0,0-.81.68,1,1,0,0,0,.25,1l4.13,4-1,5.68A1,1,0,0,0,6.9,21.44L12,18.77l5.1,2.67a.93.93,0,0,0,.46.12,1,1,0,0,0,.59-.19,1,1,0,0,0,.4-1l-1-5.68,4.13-4A1,1,0,0,0,22,9.67Zm-6.15,4a1,1,0,0,0-.29.88l.72,4.2-3.76-2a1.06,1.06,0,0,0-.94,0l-3.76,2,.72-4.2a1,1,0,0,0-.29-.88l-3-3,4.21-.61a1,1,0,0,0,.76-.55L12,5.7l1.88,3.82a1,1,0,0,0,.76.55l4.21.61Z"/></svg> {{ $review->rating }}</span>
+                                                    <span class="reviews__rating">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                                            <path d="M22,9.67A1,1,0,0,0,21.14,9l-5.69-.83L12.9,3a1,1,0,0,0-1.8,0L8.55,8.16,2.86,9a1,1,0,0,0-.81.68,1,1,0,0,0,.25,1l4.13,4-1,5.68A1,1,0,0,0,6.9,21.44L12,18.77l5.1,2.67a.93.93,0,0,0,.46.12,1,1,0,0,0,.59-.19,1,1,0,0,0,.4-1l-1-5.68,4.13-4A1,1,0,0,0,22,9.67Zm-6.15,4a1,1,0,0,0-.29.88l.72,4.2-3.76-2a1.06,1.06,0,0,0-.94,0l-3.76,2,.72-4.2a1,1,0,0,0-.29-.88l-3-3,4.21-.61a1,1,0,0,0,.76-.55L12,5.7l1.88,3.82a1,1,0,0,0,.76.55l4.21.61Z"/></svg>
+                                                        {{ $review->rating }}
+                                                    <a href="#modal-delete2" class="main__table-btn main__table-btn--delete open-modal">
+														<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                                                            <path d="M10,18a1,1,0,0,0,1-1V11a1,1,0,0,0-2,0v6A1,1,0,0,0,10,18ZM20,6H16V5a3,3,0,0,0-3-3H11A3,3,0,0,0,8,5V6H4A1,1,0,0,0,4,8H5V19a3,3,0,0,0,3,3h8a3,3,0,0,0,3-3V8h1a1,1,0,0,0,0-2ZM10,5a1,1,0,0,1,1-1h2a1,1,0,0,1,1,1V6H10Zm7,14a1,1,0,0,1-1,1H8a1,1,0,0,1-1-1V8H17Zm-3-1a1,1,0,0,0,1-1V11a1,1,0,0,0-2,0v6A1,1,0,0,0,14,18Z"></path>
+                                                        </svg>
+													</a>
+                                                    </span>
                                                 </div>
                                                 <p class="reviews__text">{{ $review->description }}</p>
                                                 <div class="comments__actions">
@@ -171,18 +195,19 @@
                                         </ul>
                                     </div>
 
-                                    <form action="#" class="reviews__form">
+                                    <form action="{{ route('review.store') }}" class="reviews__form" method="POST">
+                                        @csrf
+                                        <input type="hidden" name="movie_id" value="{{ $movie->id }}">
                                         <div class="row">
                                             <div class="col-12 col-md-9 col-lg-10 col-xl-9">
                                                 <div class="sign__group">
-                                                    <input type="text" name="title" class="sign__input" placeholder="Title">
+                                                    <input type="text" name="title" class="sign__input" placeholder="Título">
                                                 </div>
                                             </div>
 
                                             <div class="col-12 col-md-3 col-lg-2 col-xl-3">
                                                 <div class="sign__group">
-                                                    <select name="select" id="select" class="sign__select">
-                                                        <option value="0">Rating</option>
+                                                    <select name="rating" id="select" class="sign__select">
                                                         <option value="10">10</option>
                                                         <option value="9">9</option>
                                                         <option value="8">8</option>
@@ -199,12 +224,12 @@
 
                                             <div class="col-12">
                                                 <div class="sign__group">
-                                                    <textarea id="text2" name="text2" class="sign__textarea" placeholder="Add review"></textarea>
+                                                    <textarea id="text2" name="description" class="sign__textarea" placeholder="Conteúdo"></textarea>
                                                 </div>
                                             </div>
 
                                             <div class="col-12">
-                                                <button type="button" class="sign__btn">Send</button>
+                                                <button type="submit" class="sign__btn">Enviar</button>
                                             </div>
                                         </div>
                                     </form>
@@ -318,3 +343,5 @@
         });
     </script>
 @endpush
+
+@include('app.components.swet-alert-success')

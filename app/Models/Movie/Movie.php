@@ -67,6 +67,14 @@ class Movie extends Model
         return $query->where('playing_now', 1)->orderByDesc('release_date');
     }
 
+    public function scopeAverageAvaliate($query)
+    {
+        return $query->with('reviews')
+            ->first()
+            ->reviews
+            ->avg('rating');
+    }
+
     public function scopeSimiliarMovies($query, $id, $genres)
     {
         $array = $genres->pluck('id')->toArray();

@@ -7,6 +7,14 @@ use Illuminate\Support\Facades\Auth;
 
 class FavoriteController extends Controller
 {
+    public function index()
+    {
+        $user = Auth::user();
+        $movies = $user->favorites()->with(['genres'])->paginate(18);
+
+        return view('app.profile.favorites', compact('movies', 'user'));
+    }
+
     public function store(Request $request)
     {
         $movieId = $request->input('movie_id');

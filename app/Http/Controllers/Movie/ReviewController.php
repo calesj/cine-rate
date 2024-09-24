@@ -36,12 +36,10 @@ class ReviewController extends Controller
             'movie_id' => $request->movie_id,
             'title' => $request->title,
             'description' => $request->description,
-            'rating' => $request->rate,
+            'rating' => $request->rating,
         ]);
 
-        toast('Você enviou o seu review', 'success');
-
-        return redirect()->back();
+        return redirect()->back()->with(['success' => 'você escreveu um comentário com sucesso!']);
     }
 
     public function show($id)
@@ -78,6 +76,6 @@ class ReviewController extends Controller
             ]
         );
 
-        return redirect()->back();
+        return redirect()->back()->with(['success' => 'Você avaliou um comentário']);
     }
 }

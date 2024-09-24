@@ -17,7 +17,7 @@
             });
             Toast.fire({
                 icon: "error",
-                title: "{{ $errors->first() }}"
+                title: "{{ $errors->first() ?: $errors->updatePassword->first() }}"
             });
         </script>
     @endpush

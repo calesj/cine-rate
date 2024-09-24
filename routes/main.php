@@ -15,7 +15,17 @@ Route::group(['middleware' => ['auth', 'throttle:30,1']], function () {
     /** Favorita ou remove dos favoritos */
     Route::post('favorite', [FavoriteController::class, 'store'])->name('favorite.store');
 
-    /** Da like ou dislike em um review */
-    Route::post('review/like', [ReviewController::class, 'like'])->name('review.like');
+    /** Lista os filmes favoritos do usuario logado */
+    Route::get('favorites', [FavoriteController::class, 'index'])->name('favorites');
+
+    /** Dashboard Perfil */
+    Route::get('dashboard', [MovieController::class, 'index'])->name('dashboard');
+
+    Route::group(['prefix' => 'review'], function () {
+        /** Da like ou dislike em um review */
+        Route::post('like', [ReviewController::class, 'like'])->name('review.like');
+
+        Route::post('store', [ReviewController::class, 'store'])->name('review.store');
+    });
 });
 
