@@ -47,9 +47,18 @@ class ReviewController extends Controller
         // Exibe um post específico
     }
 
-    public function edit($id)
+    public function edit($id, Request $request)
     {
-        // Exibe o formulário para editar um post existente
+        $user = auth()->user()->id;
+        $this->review->find($id)->update([
+            'user_id' => $user,
+            'movie_id' => $request->movie_id,
+            'title' => $request->title,
+            'description' => $request->description,
+            'rating' => $request->rating,
+        ]);
+
+        return redirect()->back()->with(['success' => 'você atualizou um comentário com sucesso!']);
     }
 
     public function update(Request $request, $id)
@@ -59,7 +68,9 @@ class ReviewController extends Controller
 
     public function destroy($id)
     {
-        // Exclui um post do banco de dados
+        $auth = auth()->user()->id;
+        Review::find($id)->where('user_id', $auth)->delete();
+        return response()->json(['success' => 'review deletado com sucesso!']);
     }
 
     public function like(LikeRequest $request)

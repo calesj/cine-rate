@@ -26,6 +26,10 @@ Route::group(['middleware' => ['auth', 'throttle:30,1']], function () {
         Route::post('like', [ReviewController::class, 'like'])->name('review.like');
 
         Route::post('store', [ReviewController::class, 'store'])->name('review.store');
+
+        Route::put('{id}/update', [ReviewController::class, 'update'])->name('review.update');
+
+        Route::delete('{id}/delete', [ReviewController::class, 'destroy'])->name('review.destroy');
     });
 });
 
