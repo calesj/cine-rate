@@ -101,27 +101,25 @@
                                         @foreach($reviews as $review)
                                             <li class="reviews__item">
                                                 <div class="reviews__autor">
-                                                    <img class="reviews__avatar" src="{{ $review->user->image ? asset('avatar/' . $review->user->image) : asset('assets/img/avatar.svg') }}" alt="">
+                                                    <img class="reviews__avatar" src="{{ $review->user->image ? asset('storage/' . $review->user->image) : asset('assets/img/avatar.svg') }}" alt="">
                                                     <span class="reviews__name">{{ $review->title }}</span>
                                                     <span class="reviews__time">{{ $review->user->name }} - {{ releaseDate($review->created_at) }} </span>
                                                     <span class="reviews__rating">
                                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                                                             <path d="M22,9.67A1,1,0,0,0,21.14,9l-5.69-.83L12.9,3a1,1,0,0,0-1.8,0L8.55,8.16,2.86,9a1,1,0,0,0-.81.68,1,1,0,0,0,.25,1l4.13,4-1,5.68A1,1,0,0,0,6.9,21.44L12,18.77l5.1,2.67a.93.93,0,0,0,.46.12,1,1,0,0,0,.59-.19,1,1,0,0,0,.4-1l-1-5.68,4.13-4A1,1,0,0,0,22,9.67Zm-6.15,4a1,1,0,0,0-.29.88l.72,4.2-3.76-2a1.06,1.06,0,0,0-.94,0l-3.76,2,.72-4.2a1,1,0,0,0-.29-.88l-3-3,4.21-.61a1,1,0,0,0,.76-.55L12,5.7l1.88,3.82a1,1,0,0,0,.76.55l4.21.61Z"/></svg>
                                                         {{ $review->rating }}
-                                                        @if($review->user->id == auth()->user()->id)
-                                                            <div style="margin-left: 20px">
-                                                                <button class="btn_edit" data-review-id="{{ $review->id }}">
-                                                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                                                                        <path d="M22,7.24a1,1,0,0,0-.29-.71L17.47,2.29A1,1,0,0,0,16.76,2a1,1,0,0,0-.71.29L13.22,5.12h0L2.29,16.05a1,1,0,0,0-.29.71V21a1,1,0,0,0,1,1H7.24A1,1,0,0,0,8,21.71L18.87,10.78h0L21.71,8a1.19,1.19,0,0,0,.22-.33,1,1,0,0,0,0-.24.7.7,0,0,0,0-.14ZM6.83,20H4V17.17l9.93-9.93,2.83,2.83ZM18.17,8.66,15.34,5.83l1.42-1.41,2.82,2.82Z"></path>
-                                                                    </svg>
-                                                                </button>
+                                                        @auth
+                                                            @if($review->user->id == auth()->user()->id)
+                                                                <div style="margin-left: 20px">
                                                                 <button class="btn_delete" data-review-id="{{ $review->id }}">
                                                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                                                                         <path d="M10,18a1,1,0,0,0,1-1V11a1,1,0,0,0-2,0v6A1,1,0,0,0,10,18ZM20,6H16V5a3,3,0,0,0-3-3H11A3,3,0,0,0,8,5V6H4A1,1,0,0,0,4,8H5V19a3,3,0,0,0,3,3h8a3,3,0,0,0,3-3V8h1a1,1,0,0,0,0-2ZM10,5a1,1,0,0,1,1-1h2a1,1,0,0,1,1,1V6H10Zm7,14a1,1,0,0,1-1,1H8a1,1,0,0,1-1-1V8H17Zm-3-1a1,1,0,0,0,1-1V11a1,1,0,0,0-2,0v6A1,1,0,0,0,14,18Z"></path>
                                                                     </svg>
                                                                 </button>
                                                             </div>
-                                                        @endif
+                                                            @endif
+                                                        @endauth
+
                                                     </span>
                                                 </div>
                                                 <p class="reviews__text">{{ $review->description }}</p>
