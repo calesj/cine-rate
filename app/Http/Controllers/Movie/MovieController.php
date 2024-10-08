@@ -69,14 +69,16 @@ class MovieController extends Controller
     /** Detalhes do filme com base no id passado por parametro */
     public function show(string $id)
     {
-        $movie = $this->movie->with(['genres'])->find($id);
-
+        $movie = $this->movie
+            ->with(['genres']) // Carrega as relações necessárias
+            ->withAvg('reviews', 'rating') // Calcula a média de 'rating' diretamente no banco
+            ->find($id);
 
         if (!$movie) {
             return redirect()->route('fallback.route');
         }
 
-        $average = number_format($movie->averageAvaliate(), 1);
+        $average = number_format($movie->reviews_avg_rating, 1);
 
         $reviews = $movie->reviews()->with(['user'])->likesCount()->dislikesCount()->orderByDesc('created_at')->paginate(7);
 

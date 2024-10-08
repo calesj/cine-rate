@@ -11,7 +11,9 @@ class AppController extends Controller
     /** Página Inicial */
     public function index(SearchRequest $request): View
     {
-        $query = Movie::select(['id', 'title', 'overview', 'image']);
+        $query = Movie::select(['id', 'title', 'overview', 'image'])
+            ->with(['genres'])
+            ->withAvg('reviews', 'rating');
 
         /** Caso seja uma busca */
         if (!empty($request->search)) {
@@ -30,6 +32,7 @@ class AppController extends Controller
         /** Caso nao seja uma busca */
         $nowPlaying = $query->playingNow()->with(['genres'])->get(['id', 'title', 'image'])->take(12);
         $movies = $query->take(10)->get(['id', 'title', 'overview', 'image']); // Usar get() somente aqui
+
         return view('app.index', compact('movies', 'nowPlaying'));
     }
 }

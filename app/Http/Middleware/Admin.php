@@ -16,7 +16,6 @@ class Admin
      */
     public function handle(Request $request, Closure $next): Response
     {
-        dd('oi');
         if (Auth::user()->is_admin === true) {
             return $next($request);
         }
